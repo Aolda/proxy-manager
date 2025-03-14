@@ -14,6 +14,8 @@ RUN pnpm run build
 
 FROM nginx:stable-alpine
 
+RUN apk add --no-cache fcgiwrap spawn-fcgi
+
 COPY rootfs/ /
 COPY --from=build /app/dist /app/frontend
 
@@ -25,6 +27,8 @@ ENV PUID=${PUID}
 ENV PGID=${PGID}
 
 RUN chmod +x /docker-entrypoint.sh
+RUN chmod +x /usr/lib/nginx-api/reload.sh
+RUN chmod +x /usr/lib/nginx-api/test.sh
 
 EXPOSE 80 81 443
 
