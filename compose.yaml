@@ -8,3 +8,37 @@ services:
       - '443:443'
     volumes:
       - ./data:/data
+    networks:
+      - itda_net
+
+  backend:
+    image: jjjjjk12/itda_backend
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_SERVER_BASE-IP=${SERVER_IP}
+    volumes:
+      - ./data:/data
+    networks:
+      - itda_net
+
+  mysql:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - itda_net
+
+networks:
+  itda_net: {}
+
+volumes:
+  mysql: {}
