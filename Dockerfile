@@ -14,7 +14,7 @@ RUN pnpm run build
 
 FROM nginx:stable-alpine
 
-RUN apk add --no-cache fcgiwrap spawn-fcgi
+RUN apk add --no-cache fcgiwrap spawn-fcgi shadow
 
 COPY rootfs/ /
 COPY --from=build /app/dist /app/frontend
