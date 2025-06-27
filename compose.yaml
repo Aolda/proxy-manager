@@ -1,21 +1,15 @@
 services:
   nginx:
-    image: aolda-proxy-manager
+    image: aolda/itda
     restart: unless-stopped
-    ports:
-      - '80:80'
-      - '81:81'
-      - '443:443'
+    network_mode: host
     volumes:
       - ./data:/data
-    networks:
-      - itda_net
 
   backend:
-    image: jjjjjk12/itda_backend
+    image: aolda/itda_backend
     restart: unless-stopped
-    depends_on:
-      - mysql
+    network_mode: host
     environment:
       - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
@@ -23,22 +17,3 @@ services:
       - SPRING_SERVER_BASE-IP=${SERVER_IP}
     volumes:
       - ./data:/data
-    networks:
-      - itda_net
-
-  mysql:
-    image: mysql:8
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME}
-    volumes:
-      - mysql:/var/lib/mysql
-    networks:
-      - itda_net
-
-networks:
-  itda_net: {}
-
-volumes:
-  mysql: {}
