@@ -2,18 +2,46 @@ services:
   nginx:
     image: aolda/itda
     restart: unless-stopped
-    network_mode: host
     volumes:
       - ./data:/data
-
+    networks:
+      macvlan_mgmt:
+        ipv4_address: 172.16.10.254
+      macvlan_provider:
+        ipv4_address: 10.16.254.254
+      macvlan_external:
+        ipv4_address: 172.16.50.12
   backend:
     image: aolda/itda_backend
-    restart: unless-stopped
-    network_mode: host
+    container_name: itda_backend
     environment:
+      - SERVER_PORT=8888
+      - SPRING_SERVER_KEYSTONE=${KEYSTONE}
+      - SPRING_SERVER_ADMIN-PROJECT=${ADMIN_PROJECT}
       - SPRING_DATASOURCE_URL=${DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
-      - SPRING_SERVER_BASE-IP=${SERVER_IP}
+      - SPRING_SERVER_BASE-IP=${SERVER-IP}
     volumes:
       - ./data:/data
+    networks:
+      macvlan_mgmt:
+        ipv4_address: 172.16.10.253
+      macvlan_provider:
+        ipv4_address: 10.16.254.253
+      macvlan_external:
+        ipv4_address: 172.16.50.120
+    restart: unless-stopped
+
+networks:
+  macvlan_mgmt:
+    name: macvlan-mgmt
+    external: true
+
+  macvlan_provider:
+    name: macvlan-provider
+    external: true
+
+  macvlan_external:
+    name: macvlan-external
+    external: true
