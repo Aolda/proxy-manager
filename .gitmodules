@@ -1,6 +1,6 @@
 [submodule "proxy-manager-frontend"]
 	path = proxy-manager-frontend
-	url = https://git.ajou.ac.kr/aolda/proxy-manager-frontend.git
+	url = https://github.com/Aolda/proxy-manager-frontend.git
 [submodule "proxy-manager-backend"]
 	path = proxy-manager-backend
 	url = https://git.ajou.ac.kr/aolda/proxy-manager-backend.git
