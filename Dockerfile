@@ -14,7 +14,7 @@ RUN pnpm run build
 
 FROM nginx:stable-alpine
 
-RUN apk add --no-cache fcgiwrap spawn-fcgi shadow
+RUN apk add --no-cache fcgiwrap spawn-fcgi shadow iproute2
 
 COPY rootfs/ /
 COPY --from=build /app/dist /app/frontend
@@ -26,6 +26,7 @@ ARG PGID=1000
 ENV PUID=${PUID}
 ENV PGID=${PGID}
 
+RUN chmod 0755 /usr/local/sbin/configure-vip-routing.sh
 RUN chmod +x /docker-entrypoint.sh
 RUN chmod +x /usr/lib/nginx-api/reload.sh
 RUN chmod +x /usr/lib/nginx-api/test.sh
