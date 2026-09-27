@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# Prepare VIP reply routing before starting any services.
+/usr/local/sbin/configure-vip-routing.sh || exit 1
+
 PUID=${PUID:-1000}
 PGID=${PGID:-1000}
 
